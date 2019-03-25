@@ -1,10 +1,39 @@
 import React from "react"
+
+import PropTypes from "prop-types"
+import { connect } from "react-redux"
+
 import { StaticQuery, Link, graphql } from "gatsby"
 const ListLink = props => (
   <li style={{ display: `inline-block`, marginRight: `1rem` }}>
     <Link to={props.to}>{props.children}</Link>
   </li>
 )
+
+const Counter = ({ count, increment }) => (
+  <div>
+    <p>Count: {count}</p>
+    <button onClick={increment}>Increment</button>
+  </div>
+)
+
+Counter.propTypes = {
+  count: PropTypes.number.isRequired,
+  increment: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = ({ count }) => {
+  return { count }
+}
+
+const mapDispatchToProps = dispatch => {
+  return { increment: () => dispatch({ type: `INCREMENT` }) }
+}
+
+const ConnectedCounter = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Counter)
 
 export default ({ children }) => (
   <div style={{ margin: `3rem auto`, maxWidth: 650, padding: `0 1rem` }}>
@@ -16,9 +45,9 @@ export default ({ children }) => (
         <ListLink to="/">Home</ListLink>
         <ListLink to="/about/">About</ListLink>
         <ListLink to="/contact/">Contact</ListLink>
-        <ListLink to="/about-css-modules/">about-css-modules</ListLink>
-        
+        <ListLink to="/about-css-modules/">about-css-modules</ListLink>        
       </ul>
+      <ConnectedCounter />
     </header>
     {children}
   </div>
